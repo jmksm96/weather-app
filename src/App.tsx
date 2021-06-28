@@ -1,29 +1,33 @@
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Weather from "./components/weather/Weather";
-import Title from "./components/title/Title";
-import City from "./components/city/City";
-import axios from 'axios';
+
+
+type PlacesType = {
+    name: string
+    zip: string
+}
+const places: Array<PlacesType> = [
+    {name: 'Minsk', zip: '220004'},
+    {name: 'Kiev', zip: '01001'},
+    {name: 'Moscow', zip: '101000'}
+]
 
 const App = () => {
+    const [activePlace, setActivePlace] = useState<number>(0)
 
-    useEffect(() => {
-        const url = 'http://api.openweathermap.org/data/2.5/weather?q=Minsk,by&appid=4371f7ae78beacc2ff08bd322e1e0463&units=metric'
-        axios.get(url).then((resp) => {
-            const data = resp.data
-        })
-    },[])
 
     return (
         <div className={'App'}>
-            <Title title={'Current City'}/>
             <div className={'contentBlock'}>
-                <City/>
+
+                {places.map((place, index) => (
+                    <button key={index} onClick={() => setActivePlace(index)}>
+                        {place.name}
+                    </button>)
+                )}
+                <Weather zip={places[activePlace].zip}/>
             </div>
-            <div className={'contentBlock'}>
-                <Weather/>
-            </div>
-            <Title title={'Current Weather'}/>
         </div>
     );
 }
